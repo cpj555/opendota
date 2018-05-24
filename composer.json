@@ -1,0 +1,32 @@
+{
+    "name": "losingbattle/opendota",
+    "description": "opendotaSDK",
+    "keywords": [
+        "dota",
+        "opendota",
+        "sdk"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "losingbattle",
+            "email": "741696717@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "~6.2",
+        "monolog/monolog": "^1.23",
+        "pimple/pimple": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "OpenDota\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EasyWeChat\\Tests\\": "tests/"
+        }
+    }
+}
