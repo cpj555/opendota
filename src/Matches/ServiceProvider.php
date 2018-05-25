@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace EasyWeChat\OfficialAccount\Menu;
+namespace OpenDota\Matches;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -17,7 +17,9 @@ use Pimple\ServiceProviderInterface;
 
 class ServiceProvider implements ServiceProviderInterface
 {
-
+    /**
+     * {@inheritdoc}.
+     */
     public function register(Container $app)
     {
         $app['matches'] = function ($app) {

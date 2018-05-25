@@ -4,7 +4,7 @@ namespace OpenDota;
 
 /**
  * Class Factory.
- *
+ * @method static \OpenDota\Application        (array $config)
  */
 class Factory
 {
@@ -16,8 +16,8 @@ class Factory
      */
     public static function make($name, array $config)
     {
-        $namespace = Kernel\Support\Str::studly($name);
-        $application = "\\OpenDota\\{$namespace}\\Application";
+//        $namespace = Kernel\Support\Str::studly($name);
+        $application = "\\OpenDota\\Application";
         return new $application($config);
     }
 

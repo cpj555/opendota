@@ -14,7 +14,7 @@ use Pimple\Container;
  *
  * @author overtrue <i@overtrue.me>
  *
- * @property \EasyWeChat\Kernel\Config                  $config
+ * @property \OpenDota\Kernel\Config                  $config
  * @property \Symfony\Component\HttpFoundation\Request  $request
  * @property \GuzzleHttp\Client                         $http_client
  * @property \Monolog\Logger                            $logger
@@ -84,7 +84,7 @@ class ServiceContainer extends Container
             LogServiceProvider::class,
             RequestServiceProvider::class,
             HttpClientServiceProvider::class,
-            ExtensionServiceProvider::class,
+//            ExtensionServiceProvider::class,
         ], $this->providers);
     }
     /**

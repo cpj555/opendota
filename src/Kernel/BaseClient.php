@@ -4,6 +4,7 @@
 namespace OpenDota\Kernel;
 
 use OpenDota\Kernel\Contracts\AccessTokenInterface;
+use OpenDota\Kernel\Exceptions\Exception;
 use OpenDota\Kernel\Http\Response;
 use OpenDota\Kernel\Traits\HasHttpRequests;
 use GuzzleHttp\Client;
@@ -20,15 +21,17 @@ use Psr\Http\Message\ResponseInterface;
  */
 class BaseClient
 {
-    use HasHttpRequests { request as performRequest; }
+    use HasHttpRequests {
+        request as performRequest;
+    }
 
     /**
-     * @var \EasyWeChat\Kernel\ServiceContainer
+     * @var \OpenDota\Kernel\ServiceContainer
      */
     protected $app;
 
     /**
-     * @var \EasyWeChat\Kernel\Contracts\AccessTokenInterface
+     * @var \OpenDota\Kernel\Contracts\AccessTokenInterface
      */
     protected $accessToken;
 
@@ -40,24 +43,22 @@ class BaseClient
     /**
      * BaseClient constructor.
      *
-     * @param \EasyWeChat\Kernel\ServiceContainer                    $app
-     * @param \EasyWeChat\Kernel\Contracts\AccessTokenInterface|null $accessToken
+     * @param \OpenDota\Kernel\ServiceContainer $app
      */
-    public function __construct(ServiceContainer $app, AccessTokenInterface $accessToken = null)
+    public function __construct(ServiceContainer $app)
     {
         $this->app = $app;
-        $this->accessToken = $accessToken ?? $this->app['access_token'];
     }
 
     /**
      * GET request.
      *
      * @param string $url
-     * @param array  $query
+     * @param array $query
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     * @return \Psr\Http\Message\ResponseInterface|\OpenDota\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function httpGet(string $url, array $query = [])
     {
@@ -68,11 +69,11 @@ class BaseClient
      * POST request.
      *
      * @param string $url
-     * @param array  $data
+     * @param array $data
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     * @return \Psr\Http\Message\ResponseInterface|\OpenDota\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function httpPost(string $url, array $data = [])
     {
@@ -82,13 +83,13 @@ class BaseClient
     /**
      * JSON request.
      *
-     * @param string       $url
+     * @param string $url
      * @param string|array $data
-     * @param array        $query
+     * @param array $query
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     * @return \Psr\Http\Message\ResponseInterface|\OpenDota\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function httpPostJson(string $url, array $data = [], array $query = [])
     {
@@ -99,13 +100,13 @@ class BaseClient
      * Upload file.
      *
      * @param string $url
-     * @param array  $files
-     * @param array  $form
-     * @param array  $query
+     * @param array $files
+     * @param array $form
+     * @param array $query
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     * @return \Psr\Http\Message\ResponseInterface|\OpenDota\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function httpUpload(string $url, array $files = [], array $form = [], array $query = [])
     {
@@ -126,34 +127,14 @@ class BaseClient
     }
 
     /**
-     * @return AccessTokenInterface
-     */
-    public function getAccessToken(): AccessTokenInterface
-    {
-        return $this->accessToken;
-    }
-
-    /**
-     * @param \EasyWeChat\Kernel\Contracts\AccessTokenInterface $accessToken
-     *
-     * @return $this
-     */
-    public function setAccessToken(AccessTokenInterface $accessToken)
-    {
-        $this->accessToken = $accessToken;
-
-        return $this;
-    }
-
-    /**
      * @param string $url
      * @param string $method
-     * @param array  $options
-     * @param bool   $returnRaw
+     * @param array $options
+     * @param bool $returnRaw
      *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     * @return \Psr\Http\Message\ResponseInterface|\OpenDota\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function request(string $url, string $method = 'GET', array $options = [], $returnRaw = false)
     {
@@ -169,11 +150,11 @@ class BaseClient
     /**
      * @param string $url
      * @param string $method
-     * @param array  $options
+     * @param array $options
      *
-     * @return \EasyWeChat\Kernel\Http\Response
+     * @return \OpenDota\Kernel\Http\Response
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \OpenDota\Kernel\Exceptions\InvalidConfigException
      */
     public function requestRaw(string $url, string $method = 'GET', array $options = [])
     {
@@ -201,28 +182,8 @@ class BaseClient
     {
         // retry
         $this->pushMiddleware($this->retryMiddleware(), 'retry');
-        // access token
-        $this->pushMiddleware($this->accessTokenMiddleware(), 'access_token');
         // log
         $this->pushMiddleware($this->logMiddleware(), 'log');
-    }
-
-    /**
-     * Attache access token to request query.
-     *
-     * @return \Closure
-     */
-    protected function accessTokenMiddleware()
-    {
-        return function (callable $handler) {
-            return function (RequestInterface $request, array $options) use ($handler) {
-                if ($this->accessToken) {
-                    $request = $this->accessToken->applyToRequest($request, $options);
-                }
-
-                return $handler($request, $options);
-            };
-        };
     }
 
     /**
@@ -249,17 +210,18 @@ class BaseClient
             RequestInterface $request,
             ResponseInterface $response = null
         ) {
+            if ($response->getHeader('X-Free-Requests-Remaining') <= 0) {
+                throw new Exception('超过一分钟内次数,请稍微再试');
+            }
+
+            if ($response->getHeader('X-Rate-Limit-Remaining') <= 0) {
+                throw new Exception('今天的调用次数已用完');
+            }
             // Limit the number of retries to 2
             if ($retries < $this->app->config->get('http.retries', 1) && $response && $body = $response->getBody()) {
                 // Retry on server errors
                 $response = json_decode($body, true);
-
-                if (!empty($response['errcode']) && in_array(abs($response['errcode']), [40001, 40014, 42001], true)) {
-                    $this->accessToken->refresh();
-                    $this->app['logger']->debug('Retrying with refreshed access token.');
-
-                    return true;
-                }
+                return $response;
             }
 
             return false;

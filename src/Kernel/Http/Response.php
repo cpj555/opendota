@@ -10,8 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Response.
- *
- * @author overtrue <i@overtrue.me>
  */
 class Response extends GuzzleResponse
 {
@@ -78,7 +76,7 @@ class Response extends GuzzleResponse
     /**
      * Get collection data.
      *
-     * @return \EasyWeChat\Kernel\Support\Collection
+     * @return \OpenDota\Kernel\Support\Collection
      */
     public function toCollection()
     {
