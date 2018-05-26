@@ -142,6 +142,10 @@ class BaseClient
             $this->registerHttpMiddlewares();
         }
 
+        if ($api_key = $this->app->config->get('api_key')) {
+            $options['query']['api_key'] = $api_key;
+        }
+
         $response = $this->performRequest($url, $method, $options);
 
         return $returnRaw ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
