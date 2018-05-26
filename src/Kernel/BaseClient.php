@@ -210,15 +210,17 @@ class BaseClient
             RequestInterface $request,
             ResponseInterface $response = null
         ) {
-            if ($response->getHeader('X-Free-Requests-Remaining') <= 0) {
-                throw new Exception('超过一分钟内次数,请稍微再试');
-            }
 
-            if ($response->getHeader('X-Rate-Limit-Remaining') <= 0) {
-                throw new Exception('今天的调用次数已用完');
-            }
             // Limit the number of retries to 2
             if ($retries < $this->app->config->get('http.retries', 1) && $response && $body = $response->getBody()) {
+
+                if ($response->getHeader('X-Free-Requests-Remaining') <= 0) {
+                    throw new Exception('超过一分钟内次数,请稍微再试');
+                }
+
+                if ($response->getHeader('X-Rate-Limit-Remaining') <= 0) {
+                    throw new Exception('今天的调用次数已用完');
+                }
                 // Retry on server errors
                 $response = json_decode($body, true);
                 return $response;

@@ -23,7 +23,15 @@ class ServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app['matches'] = function ($app) {
-            return new Client($app);
+            return new MacthesClient($app);
+        };
+
+        $app['promatches'] = function ($app) {
+            return new ProMatchesClient($app);
+        };
+
+        $app['publicmatches'] = function ($app) {
+            return new PublicMatchesClient($app);
         };
     }
 }

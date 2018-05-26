@@ -66,7 +66,7 @@ class ServiceContainer extends Container
         $base = [
             // http://docs.guzzlephp.org/en/stable/request-options.html
             'http' => [
-                'timeout' => 5.0,
+                'timeout' => 10.0,
                 'base_uri' => 'https://api.opendota.com/api/',
             ],
         ];

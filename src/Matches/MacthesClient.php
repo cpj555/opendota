@@ -7,16 +7,16 @@ use OpenDota\Kernel\BaseClient;
 /**
  * Class Client.
  */
-class Client extends BaseClient
+class MacthesClient extends BaseClient
 {
 
     /**
-     *
+     * 指定比赛编号数据
      * @param int $match_id
      *
      * @return mixed
      */
-    public function match(int $match_id)
+    public function data(int $match_id)
     {
         return $this->httpGet("matches/$match_id");
     }
