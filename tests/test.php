@@ -15,7 +15,7 @@ $application->getConfig();
 //\OpenDota\Factory::
 
 try{
-    echo (json_encode($application->heroes->data()));
+    echo (json_encode($application->promatches->list(3905276645)));
 }catch (\Exception $exception){
     var_dump($exception->getMessage());
 }

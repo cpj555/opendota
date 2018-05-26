@@ -43,7 +43,7 @@ $app = new Application($options);
 
 $heros = $app->heros;
 $teams = $app->teams;
-
+(其他接口参考文档和phpstrom ctrl跳进去看 - -)
 $heros->data();
 $heros->recent_matches($hero_id);
 ```
