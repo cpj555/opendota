@@ -15,7 +15,7 @@ $application->getConfig();
 //\OpenDota\Factory::
 
 try{
-    echo (json_encode($application->request));
+    echo (json_encode($application->heroes->data()));
 }catch (\Exception $exception){
     var_dump($exception->getMessage());
 }
