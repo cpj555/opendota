@@ -29,12 +29,6 @@ class BaseClient
      * @var \OpenDota\Kernel\ServiceContainer
      */
     protected $app;
-
-    /**
-     * @var \OpenDota\Kernel\Contracts\AccessTokenInterface
-     */
-    protected $accessToken;
-
     /**
      * @var
      */
@@ -214,25 +208,25 @@ class BaseClient
             RequestInterface $request,
             ResponseInterface $response = null
         ) {
-
-            // Limit the number of retries to 2
-            if ($retries < $this->app->config->get('http.retries', 1) && $response && $body = $response->getBody()) {
-
-                if ($response->getHeader('X-Free-Requests-Remaining') <= 0) {
-                    throw new Exception('超过一分钟内次数,请稍微再试');
-                }
-
-                if ($response->getHeader('X-Rate-Limit-Remaining') <= 0) {
-                    throw new Exception('今天的调用次数已用完');
-                }
-                // Retry on server errors
-                $response = json_decode($body, true);
-                return $response;
+            if ($response->getHeader('X-Free-Requests-Remaining')[0] <= 0) {
+                $this->app['logger']->debug('每日调用次数已达上线');
+                throw new \ErrorException('每日调用次数已达上线');
+            }
+            if ($response->getHeader('X-Rate-Limit-Remaining')[0] <= 0) {
+                $this->app['logger']->debug('每分钟调用次数已达上线');
+                throw new \ErrorException('每分钟调用次数已达上线');
             }
 
             return false;
+            // Limit the number of retries to 2
+//            if ($retries < $this->app->config->get('http.retries', 1) && $response && $body = $response->getBody()) {
+//                $response = json_decode($body, true);
+//                var_dump($response);
+//                return true;
+//            }
+
         }, function () {
-            return abs($this->app->config->get('http.retry_delay', 500));
+            return abs($this->app->config->get('http.retry_delay', 5000));
         });
     }
 }

@@ -36,7 +36,13 @@ composer require "losingbattle/opendota" -vvv
 use OpenDota\Application;
 
 $options = [
-    'api_key'     => 'xxx', (选填 在官网申请后使用 取消每天调用次数显示)
+    'api_key'     => 'xxx', (选填 在官网申请后使用 取消每天调用次数限制),
+    'log' => [
+        'file' => __DIR__.'/opendota.log',
+    ],
+    'http' => [
+        'retry'=>2
+    ],
 ];
 
 $app = new Application($options);

@@ -17,11 +17,11 @@ class HttpClientServiceProvider implements ServiceProviderInterface
      * This method should only be used to configure services and parameters.
      * It should not get services.
      *
-     * @param Container $pimple A container instance
+     * @param Container $app A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $app)
     {
-        $pimple['http_client'] = function ($app) {
+        $app['http_client'] = function ($app) {
             return new Client($app['config']->get('http', []));
         };
     }

@@ -82,9 +82,7 @@ class ServiceContainer extends Container
         return array_merge([
             ConfigServiceProvider::class,
             LogServiceProvider::class,
-            RequestServiceProvider::class,
             HttpClientServiceProvider::class,
-//            ExtensionServiceProvider::class,
         ], $this->providers);
     }
     /**

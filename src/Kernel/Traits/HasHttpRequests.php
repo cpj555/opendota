@@ -5,6 +5,7 @@ namespace OpenDota\Kernel\Traits;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
+use OpenDota\Kernel\Exceptions\Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
