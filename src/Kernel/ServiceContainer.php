@@ -3,10 +3,8 @@
 namespace OpenDota\Kernel;
 
 use OpenDota\Kernel\Providers\ConfigServiceProvider;
-use OpenDota\Kernel\Providers\ExtensionServiceProvider;
 use OpenDota\Kernel\Providers\HttpClientServiceProvider;
 use OpenDota\Kernel\Providers\LogServiceProvider;
-use OpenDota\Kernel\Providers\RequestServiceProvider;
 use Pimple\Container;
 
 /**
