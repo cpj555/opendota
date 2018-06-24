@@ -208,11 +208,11 @@ class BaseClient
             RequestInterface $request,
             ResponseInterface $response = null
         ) {
-            if ($response->getHeader('X-Free-Requests-Remaining')[0] <= 0) {
-                $this->app['logger']->debug('每日调用次数已达上线');
-                throw new \ErrorException('每日调用次数已达上线');
+            if ($response->getHeader('X-Rate-Limit-Remaining-Month')[0] <= 0) {
+                $this->app['logger']->debug('每月调用次数已达上线');
+                throw new \ErrorException('每月调用次数已达上线');
             }
-            if ($response->getHeader('X-Rate-Limit-Remaining')[0] <= 0) {
+            if ($response->getHeader('X-Rate-Limit-Remaining-Minute')[0] <= 0) {
                 $this->app['logger']->debug('每分钟调用次数已达上线');
                 throw new \ErrorException('每分钟调用次数已达上线');
             }
