@@ -47,7 +47,7 @@ $options = [
 
 $app = new Application($options);
 
-$heros = $app->heros;
+$heros = $app->heroes;
 $teams = $app->teams;
 (其他接口参考文档和phpstrom ctrl跳进去看 - -)
 $heros->data();
